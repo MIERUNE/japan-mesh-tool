@@ -97,15 +97,14 @@ def get_mesh_size(meshnum: int) -> tuple:
 
 def get_meshes(meshnum, extent=None) -> list:
     """[summary]
-    メッシュ次数および各オフセット値から、全てのメッシュの頂点の経緯度のリストを返す
+    メッシュ次数および領域から、その領域に重なる全てのメッシュの頂点の経緯度のリストを返す
 
     Args:
-        meshnum ([type]): [description]
-        start_offset (list, optional): [description]. Defaults to [0, 0].
-        end_offset (list, optional): [description]. Defaults to [0, 0].
+        meshnum ([type]): メッシュ次数
+        extent (list, optional):  経緯度のペアのリストで領域指定
 
     Returns:
-        list: [description]
+        list: [ {"geometry":<メッシュのジオメトリ>, "code":<メッシュコード>}... ]
     """
 
     # メッシュのx方向y方向それぞれの数
@@ -135,20 +134,20 @@ def get_meshes(meshnum, extent=None) -> list:
                     [righttop[0], leftbottom[1]],
                     leftbottom
                 ]],
-                "code": get_meshcode_by(meshnum, leftbottom, x, y)
+                "code": get_meshcode(meshnum, leftbottom, x, y)
             }
             meshes.append(mesh)
     return meshes
 
 
-def get_meshcode_by(meshnum: int, leftbottom_lonlat: list, x_count: int, y_count: int) -> str:
+def get_meshcode(meshnum: int, leftbottom_lonlat: list, x_count: int, y_count: int) -> str:
     """[summary]
     メッシュ次数、対象メッシュの左下の点の経緯度、原点から数えたメッシュ番号からメッシュコードを生成
     Args:
         meshnum (int): メッシュ次数
         leftbottom_lonlat (list): 対象メッシュの左下の経緯度
-        x_count (int): 原点から数えたx方向のメッシュ番号
-        y_count (int): 原点から数えたy方向のメッシュ番号
+        x_count (int): 原点からx方向に数えたメッシュ番号
+        y_count (int): 原点からy方向に数えたメッシュ番号
 
     Raises:
         Exception: 適切なメッシュ次数が与えられなければ例外をスロー
@@ -217,13 +216,18 @@ def get_meshcode_by(meshnum: int, leftbottom_lonlat: list, x_count: int, y_count
         meshcode += str(x_count % 5)
         return meshcode
 
-    raise Exception(f"1~6のメッシュ次数を指定してください 入力されたメッシュ次数:{meshnum}")
-
 
 if __name__ == "__main__":
+    print("initializing...")
     # コマンド初期化
     args = argschems.ARGSCHEME.parse_args()
-    meshnum = int(args.meshnum)
+
+    # メッシュ番号
+    try:
+        meshnum = int(args.meshnum)
+    except ValueError:
+        raise ValueError(
+            "Input Integer for meshnum, your input:" + str(args.meshnum))
 
     # 別称での指定を次数に置き換え
     if meshnum == 500:
@@ -234,6 +238,9 @@ if __name__ == "__main__":
         meshnum = 6
     elif meshnum == 50:
         meshnum = 7
+
+    if meshnum < 1 or 7 < meshnum:
+        raise ValueError("正しいメッシュ次数を指定してください。入力:" + str(args.meshnum))
 
     extent_texts = args.extent
     target_dir = args.target_dir
@@ -248,6 +255,11 @@ if __name__ == "__main__":
         extent = [list(map(float, extent_texts[0].split(","))),
                   list(map(float, extent_texts[1].split(",")))]
 
+    print("making meshes...")
+    # メッシュ生成
+    meshes = get_meshes(meshnum, extent)
+
+    # geojsonl文字列を生成
     geojsonl_txt = ""
     feature = {
         "type": "Feature",
@@ -259,14 +271,14 @@ if __name__ == "__main__":
             "code": 0
         }
     }
-
-    # メッシュ生成
-    meshes = get_meshes(meshnum, extent)
     for mesh in meshes:
         feature["geometry"]["coordinates"] = mesh["geometry"]
         feature["properties"]["code"] = mesh["code"]
-        geojsonl_txt += json.dumps(feature, ensure_ascii=False) + "\n"
+        geojsonl_txt += json.dumps(feature) + "\n"
 
+    print("writing file...")
     # geojsonl書き出し
-    with open(os.path.join(target_dir, f"mesh_{meshnum}.geojsonl"), mode="w") as f:
+    with open(os.path.join(target_dir, "mesh_" + str(meshnum) + ".geojsonl"), mode="w") as f:
         f.write(geojsonl_txt)
+
+    print("done")
