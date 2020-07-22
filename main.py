@@ -153,6 +153,36 @@ def get_meshcode_by(leftbottom_lonlat: list, meshnum: int, x_count: int, y_count
         meshcode += str(y_count % 10)
         meshcode += str(x_count % 10)
         return meshcode
+    elif meshnum == 4:
+        meshcode += str(int((y_count % 160) / 20))
+        meshcode += str(int((x_count % 160) / 20))
+        meshcode += str(int((y_count % 20) / 2))
+        meshcode += str(int((x_count % 20) / 2))
+        meshcode += str(y_count % 2)
+        meshcode += str(x_count % 2)
+        return meshcode
+    elif meshnum == 5:
+        meshcode += str(int((y_count % 320) / 40))
+        meshcode += str(int((x_count % 320) / 40))
+        meshcode += str(int((y_count % 40) / 4))
+        meshcode += str(int((x_count % 40) / 4))
+        meshcode += str(int((y_count % 4) / 2))
+        meshcode += str(int((x_count % 4) / 2))
+        meshcode += str(y_count % 2)
+        meshcode += str(x_count % 2)
+        return meshcode
+    elif meshnum == 6:
+        meshcode += str(int((y_count % 1600) / 200))
+        meshcode += str(int((x_count % 1600) / 200))
+        meshcode += str(int((y_count % 200) / 20))
+        meshcode += str(int((x_count % 200) / 20))
+        meshcode += str(int((y_count % 20) / 10))
+        meshcode += str(int((x_count % 20) / 10))
+        meshcode += str(int((y_count % 10) / 5))
+        meshcode += str(int((x_count % 10) / 5))
+        meshcode += str(y_count % 5)
+        meshcode += str(x_count % 5)
+        return meshcode
 
     raise Exception
 
@@ -169,7 +199,7 @@ if __name__ == "__main__":
             "code": 0
         }
     }
-    mesh_num = 3
+    mesh_num = 6
     extent = [[142.2, 44.0], [142.3, 44.5]]
 
     meshes = get_meshes(mesh_num, extent)
@@ -179,5 +209,5 @@ if __name__ == "__main__":
         feature["properties"]["code"] = mesh["code"]
         geojsonl_txt += json.dumps(feature, ensure_ascii=False) + "\n"
 
-    with open("./3rd-mesh.geojsonl", mode='w') as f:
+    with open("./5th-mesh.geojsonl", mode='w') as f:
         f.write(geojsonl_txt)
