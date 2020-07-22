@@ -4,7 +4,7 @@ import json
 
 import argschems
 
-# メッシュコード精製範囲
+# メッシュコード生成範囲
 ORIGIN_MIN_LON = 122.00
 ORIGIN_MAX_LON = 154.00
 ORIGIN_MIN_LAT = 20.00
@@ -224,6 +224,17 @@ if __name__ == "__main__":
     # コマンド初期化
     args = argschems.ARGSCHEME.parse_args()
     meshnum = int(args.meshnum)
+
+    # 別称での指定を次数に置き換え
+    if meshnum == 500:
+        meshnum = 4
+    elif meshnum == 250:
+        meshnum = 5
+    elif meshnum == 125:
+        meshnum = 6
+    elif meshnum == 50:
+        meshnum = 7
+
     extent_texts = args.extent
     target_dir = args.target_dir
 
