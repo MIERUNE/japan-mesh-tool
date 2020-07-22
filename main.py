@@ -111,8 +111,8 @@ def get_meshes(meshnum, extent=None) -> list:
     start_offset = [0, 0]
     end_offset = [0, 0]
     if extent:
-        start_offset = get_start_offset(mesh_num, extent[0])
-        end_offset = get_end_offset(mesh_num, extent[1])
+        start_offset = get_start_offset(meshnum, extent[0])
+        end_offset = get_end_offset(meshnum, extent[1])
 
     meshes = []
     for y in range(start_offset[1], y_mesh_count - end_offset[1]):
@@ -129,13 +129,28 @@ def get_meshes(meshnum, extent=None) -> list:
                     [righttop[0], leftbottom[1]],
                     leftbottom
                 ]],
-                "code": get_meshcode_by(leftbottom, meshnum, x, y)
+                "code": get_meshcode_by(meshnum, leftbottom, x, y)
             }
             meshes.append(mesh)
     return meshes
 
 
-def get_meshcode_by(leftbottom_lonlat: list, meshnum: int, x_count: int, y_count: int) -> str:
+def get_meshcode_by(meshnum: int, leftbottom_lonlat: list, x_count: int, y_count: int) -> str:
+    """[summary]
+    メッシュ次数、対象メッシュの左下の点の経緯度、原点から数えたメッシュ番号からメッシュコードを生成
+    Args:
+        meshnum (int): メッシュ次数
+        leftbottom_lonlat (list): 対象メッシュの左下の経緯度
+        x_count (int): 原点から数えたx方向のメッシュ番号
+        y_count (int): 原点から数えたy方向のメッシュ番号
+
+    Raises:
+        Exception: 適切なメッシュ次数が与えられなければ例外をスロー
+
+    Returns:
+        str: メッシュコード
+    """
+
     meshcode = ""
     # 緯度を1.5倍した整数値
     meshcode += str(int(leftbottom_lonlat[1] * 1.5))
@@ -184,7 +199,7 @@ def get_meshcode_by(leftbottom_lonlat: list, meshnum: int, x_count: int, y_count
         meshcode += str(x_count % 5)
         return meshcode
 
-    raise Exception
+    raise Exception(f"1~6のメッシュ次数を指定してください 入力されたメッシュ次数:{meshnum}")
 
 
 if __name__ == "__main__":
@@ -199,10 +214,10 @@ if __name__ == "__main__":
             "code": 0
         }
     }
-    mesh_num = 6
+    meshnum = 6
     extent = [[142.2, 44.0], [142.3, 44.5]]
 
-    meshes = get_meshes(mesh_num, extent)
+    meshes = get_meshes(meshnum, extent)
 
     for mesh in meshes:
         feature["geometry"]["coordinates"] = mesh["geometry"]
