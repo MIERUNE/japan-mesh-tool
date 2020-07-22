@@ -1,5 +1,8 @@
+import os
 import math
 import json
+
+import argschems
 
 # メッシュコード精製範囲
 ORIGIN_MIN_LON = 122.00
@@ -83,6 +86,9 @@ def get_mesh_size(meshnum: int) -> tuple:
         x_size = 1/320
         y_size = 1/480
     elif meshnum == 6:
+        x_size = 1/640
+        y_size = 1/960
+    elif meshnum == 7:
         x_size = 1/1600
         y_size = 1/2400
 
@@ -187,6 +193,18 @@ def get_meshcode_by(meshnum: int, leftbottom_lonlat: list, x_count: int, y_count
         meshcode += str(x_count % 2)
         return meshcode
     elif meshnum == 6:
+        meshcode += str(int((y_count % 640) / 80))
+        meshcode += str(int((x_count % 640) / 80))
+        meshcode += str(int((y_count % 80) / 8))
+        meshcode += str(int((x_count % 80) / 8))
+        meshcode += str(int((y_count % 8) / 4))
+        meshcode += str(int((x_count % 8) / 4))
+        meshcode += str(int((y_count % 4) / 2))
+        meshcode += str(int((x_count % 4) / 2))
+        meshcode += str(y_count % 2)
+        meshcode += str(x_count % 2)
+        return meshcode
+    elif meshnum == 7:
         meshcode += str(int((y_count % 1600) / 200))
         meshcode += str(int((x_count % 1600) / 200))
         meshcode += str(int((y_count % 200) / 20))
@@ -203,6 +221,22 @@ def get_meshcode_by(meshnum: int, leftbottom_lonlat: list, x_count: int, y_count
 
 
 if __name__ == "__main__":
+    # コマンド初期化
+    args = argschems.ARGSCHEME.parse_args()
+    meshnum = int(args.meshnum)
+    extent_texts = args.extent
+    target_dir = args.target_dir
+
+    # 保存先未指定なら実行ディレクトリに保存
+    if target_dir is None:
+        target_dir = ''
+
+    # 領域が指定されているならパース
+    extent = None
+    if extent_texts:
+        extent = [list(map(float, extent_texts[0].split(","))),
+                  list(map(float, extent_texts[1].split(",")))]
+
     geojsonl_txt = ""
     feature = {
         "type": "Feature",
@@ -214,15 +248,14 @@ if __name__ == "__main__":
             "code": 0
         }
     }
-    meshnum = 6
-    extent = [[142.2, 44.0], [142.3, 44.5]]
 
+    # メッシュ生成
     meshes = get_meshes(meshnum, extent)
-
     for mesh in meshes:
         feature["geometry"]["coordinates"] = mesh["geometry"]
         feature["properties"]["code"] = mesh["code"]
         geojsonl_txt += json.dumps(feature, ensure_ascii=False) + "\n"
 
-    with open("./5th-mesh.geojsonl", mode='w') as f:
+    # geojsonl書き出し
+    with open(os.path.join(target_dir, f"mesh_{meshnum}.geojsonl"), mode="w") as f:
         f.write(geojsonl_txt)
