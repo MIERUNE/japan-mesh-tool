@@ -1,5 +1,5 @@
 from unittest import TestCase
-from src_py.main import *
+from py_src.main import *
 
 
 class TestMain(TestCase):
