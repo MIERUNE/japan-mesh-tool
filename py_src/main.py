@@ -120,30 +120,46 @@ def get_meshes(meshnum, extent=None) -> list:
     meshes = []
     for y in range(start_offset[1], y_mesh_count - end_offset[1]):
         for x in range(start_offset[0], x_mesh_count - end_offset[0]):
-            leftbottom = [ORIGIN_MIN_LON + x * x_size,
-                          ORIGIN_MIN_LAT + y * y_size]
-            righttop = [ORIGIN_MIN_LON + (x + 1) * x_size,
-                        ORIGIN_MIN_LAT + (y + 1) * y_size]
-            mesh = {
-                "geometry": [[
-                    leftbottom,
-                    [leftbottom[0], righttop[1]],
-                    righttop,
-                    [righttop[0], leftbottom[1]],
-                    leftbottom
-                ]],
-                "code": get_meshcode(meshnum, x, y)
-            }
+            mesh = get_mesh(meshnum, x, y)
             meshes.append(mesh)
     return meshes
 
 
-def get_meshcode(meshnum: int, x_count: int, y_count: int) -> str:
+def get_mesh(meshnum: int, x: int, y: int) -> dict:
     """[summary]
-    メッシュ次数、対象メッシュの左下の点の経緯度、原点から数えたメッシュ番号からメッシュコードを生成
+    メッシュ次数、メッシュ番地からメッシュのジオメトリとメッシュコードを返す
+
     Args:
         meshnum (int): メッシュ次数
-        leftbottom_lonlat (list): 対象メッシュの左下の経緯度
+        x (int): 左から数えたメッシュ番地
+        y (int): 下から数えたメッシュ番地
+
+    Returns:
+        dict: {"geometry":<メッシュのジオメトリ>, "code":<メッシュコード>}
+    """
+    x_size, y_size = get_mesh_size(meshnum)
+    leftbottom = [ORIGIN_MIN_LON + x * x_size,
+                  ORIGIN_MIN_LAT + y * y_size]
+    righttop = [ORIGIN_MIN_LON + (x + 1) * x_size,
+                ORIGIN_MIN_LAT + (y + 1) * y_size]
+    mesh = {
+        "geometry": [[
+            leftbottom,
+            [leftbottom[0], righttop[1]],
+            righttop,
+            [righttop[0], leftbottom[1]],
+            leftbottom
+        ]],
+        "code": get_meshcode(meshnum, x, y)
+    }
+    return mesh
+
+
+def get_meshcode(meshnum: int, x_count: int, y_count: int) -> str:
+    """[summary]
+    メッシュ次数、原点から数えたメッシュ番地からメッシュコードを生成
+    Args:
+        meshnum (int): メッシュ次数
         x_count (int): 原点からx方向に数えたメッシュ番号
         y_count (int): 原点からy方向に数えたメッシュ番号
 

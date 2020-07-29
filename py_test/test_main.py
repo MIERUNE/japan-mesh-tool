@@ -28,14 +28,17 @@ class TestMain(TestCase):
         self.assertEqual(get_end_offset(
             1, [153.0, 45.33333333333333]), (1, 1))
 
+    def test_get_mesh(self):
+        mesh = get_mesh(1, 0, 0)
+        # mesheにはメッシュコードとポリゴンのジオメトリが格納されている
+        # ジオメトリはgeojson準拠:[[lon,lat],[lon,lat],[lon,lat],[lon,lat],[lon,lat]]
+        self.assertEqual(len(mesh["geometry"][0]), 5)
+        # メッシュコードの割り振り規則は後述
+        self.assertEqual(mesh["code"], "3022")
+
     def test_get_meshes(self):
         # 1次メッシュを計算
         meshes = get_meshes(1)
-        # meshesの各要素にはメッシュコードとポリゴンのジオメトリが格納されている
-        # ジオメトリはgeojson準拠:[[lon,lat],[lon,lat],[lon,lat],[lon,lat],[lon,lat]]
-        self.assertEqual(len(meshes[0]["geometry"][0]), 5)
-        # メッシュコードの割り振り規則は後述
-        self.assertEqual(meshes[0]["code"], "3022")
 
         # 1次メッシュは32x39=1248
         self.assertEqual(len(meshes), 1248)
