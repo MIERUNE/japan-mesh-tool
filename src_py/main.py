@@ -2,8 +2,6 @@ import os
 import math
 import json
 
-import argschems
-
 # メッシュコード生成範囲
 ORIGIN_MIN_LON = 122.00
 ORIGIN_MAX_LON = 154.00
@@ -134,13 +132,13 @@ def get_meshes(meshnum, extent=None) -> list:
                     [righttop[0], leftbottom[1]],
                     leftbottom
                 ]],
-                "code": get_meshcode(meshnum, leftbottom, x, y)
+                "code": get_meshcode(meshnum, x, y)
             }
             meshes.append(mesh)
     return meshes
 
 
-def get_meshcode(meshnum: int, leftbottom_lonlat: list, x_count: int, y_count: int) -> str:
+def get_meshcode(meshnum: int, x_count: int, y_count: int) -> str:
     """[summary]
     メッシュ次数、対象メッシュの左下の点の経緯度、原点から数えたメッシュ番号からメッシュコードを生成
     Args:
@@ -156,11 +154,15 @@ def get_meshcode(meshnum: int, leftbottom_lonlat: list, x_count: int, y_count: i
         str: メッシュコード
     """
 
+    x_size, y_size = get_mesh_size(meshnum)
+    left_lon = ORIGIN_MIN_LON + x_count * x_size
+    bottom_lat = ORIGIN_MIN_LAT + y_count * y_size
+
     meshcode = ""
     # 緯度を1.5倍した整数値
-    meshcode += str(int(leftbottom_lonlat[1] * 1.5))
+    meshcode += str(int(bottom_lat * 1.5))
     # 経度の整数部分の下2桁
-    meshcode += str(int(leftbottom_lonlat[0]))[1:]
+    meshcode += str(int(left_lon))[1:]
     if meshnum == 1:
         return meshcode
     elif meshnum == 2:
@@ -218,6 +220,8 @@ def get_meshcode(meshnum: int, leftbottom_lonlat: list, x_count: int, y_count: i
 
 
 if __name__ == "__main__":
+    import argschems
+
     print("initializing...")
     # コマンド初期化
     args = argschems.ARGSCHEME.parse_args()
