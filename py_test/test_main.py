@@ -34,7 +34,7 @@ class TestMain(TestCase):
         # meshesの各要素にはメッシュコードとポリゴンのジオメトリが格納されている
         # ジオメトリはgeojson準拠:[[lon,lat],[lon,lat],[lon,lat],[lon,lat],[lon,lat]]
         self.assertEqual(len(meshes[0]["geometry"][0]), 5)
-        # メッシュコード
+        # メッシュコードの割り振り規則は後述
         self.assertEqual(meshes[0]["code"], "3022")
 
         # 1次メッシュは32x39=1248
