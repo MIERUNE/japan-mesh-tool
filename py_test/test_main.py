@@ -31,6 +31,12 @@ class TestMain(TestCase):
     def test_get_meshes(self):
         # 1次メッシュを計算
         meshes = get_meshes(1)
+        # meshesの各要素にはメッシュコードとポリゴンのジオメトリが格納されている
+        # ジオメトリはgeojson準拠:[[lon,lat],[lon,lat],[lon,lat],[lon,lat],[lon,lat]]
+        self.assertEqual(len(meshes[0]["geometry"][0]), 5)
+        # メッシュコード
+        self.assertEqual(meshes[0]["code"], "3022")
+
         # 1次メッシュは32x39=1248
         self.assertEqual(len(meshes), 1248)
         # 領域を指定して生成する
