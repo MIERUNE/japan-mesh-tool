@@ -15,8 +15,8 @@
 - [対応メッシュ次数](#対応メッシュ次数)
     - [4次以降のメッシュ番号割り振りについて](#4次以降のメッシュ番号割り振りについて)
 - [テスト](#テスト)
-    - [Python](#python)
-    - [Rust](#rust)
+    - [Python版](#python版-2)
+    - [Rust版](#rust版)
 
 <!-- /TOC -->
 
@@ -125,12 +125,12 @@ japanmesh 2
 
 ## テスト
 
-### Python
+### Python版
 ./pythonディレクトリで以下のコマンドでテスト実行
 
 ```shell
 python -m unittest discover tests
 ```
 
-### Rust
+### Rust版
 未実装
