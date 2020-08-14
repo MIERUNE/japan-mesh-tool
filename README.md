@@ -71,7 +71,7 @@ python main.py 1
 Windows環境の場合、japanmeshをjapanmesh.exeに読み替えてください。
 
 ```
-japanmesh <meshnum:メッシュ次数> <領域指定、"左下経緯度 右上経緯度"形式で指定>
+japanmesh <meshnum:メッシュ次数> <カンマ区切り左下経緯度> <カンマ区切り右上経緯度>
 ```
 
 - Rust版は、常にスクリプト実行時のカレントディレクトリにgeojsonlファイルを保存します
