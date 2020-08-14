@@ -1,5 +1,5 @@
 from unittest import TestCase
-from py_src.main import *
+from japanmesh.main import *
 
 
 class TestMain(TestCase):
