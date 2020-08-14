@@ -67,7 +67,7 @@ python main.py 1
 
 ### バイナリ版
 
-Windows環境の場合、japan-meshをjapan-mesh.exeに読み替えてください。
+Windows環境の場合、japanmeshをjapanmesh.exeに読み替えてください。
 
 ```
 japanmesh <meshnum:メッシュ次数> <領域指定、"左下経緯度 右上経緯度"形式で指定>
