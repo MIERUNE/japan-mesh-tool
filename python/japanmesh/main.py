@@ -290,6 +290,12 @@ if __name__ == "__main__":
             raise ValueError(
                 "領域指定が不正です：カンマ区切りの経緯度を、スペース区切りで2つ入力してください")
 
+    # 経緯度をバリデーション
+    for latlon in extent:
+        for value in latlon:
+            if not -180 < value < 180:
+                raise ValueError("経緯度は-180から180の間で指定してください")
+    
     print("making meshes...")
     # メッシュ生成
     meshes = get_meshes(meshnum, extent)
