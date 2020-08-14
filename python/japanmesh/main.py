@@ -114,8 +114,19 @@ def get_meshes(meshnum, extent=None) -> list:
     start_offset = [0, 0]
     end_offset = [0, 0]
     if extent:
-        start_offset = get_start_offset(meshnum, extent[0])
-        end_offset = get_end_offset(meshnum, extent[1])
+        min_lon = min(extent[0][0], extent[1][0])
+        min_lat = min(extent[0][1], extent[1][1])
+        max_lon = max(extent[0][0], extent[1][0])
+        max_lat = max(extent[0][1], extent[1][1])
+
+        # [左下経緯度, 右上経緯度]にソート
+        cleaned_extent = [
+            [min_lon, min_lat],
+            [max_lon, max_lat]
+        ]
+
+        start_offset = get_start_offset(meshnum, cleaned_extent[0])
+        end_offset = get_end_offset(meshnum, cleaned_extent[1])
 
     meshes = []
     for y in range(start_offset[1], y_mesh_count - end_offset[1]):
@@ -247,7 +258,7 @@ if __name__ == "__main__":
         meshnum = int(args.meshnum)
     except ValueError:
         raise ValueError(
-            "Input Integer for meshnum, your input:" + str(args.meshnum))
+            "メッシュ次数を正しく入力してください あなたの入力：" + str(args.meshnum))
 
     # 別称での指定を次数に置き換え
     if meshnum == 500:
@@ -260,7 +271,7 @@ if __name__ == "__main__":
         meshnum = 7
 
     if meshnum < 1 or 7 < meshnum:
-        raise ValueError("正しいメッシュ次数を指定してください。入力:" + str(args.meshnum))
+        raise ValueError("メッシュ次数を正しく入力してください あなたの入力：" + str(args.meshnum))
 
     extent_texts = args.extent
     target_dir = args.target_dir
@@ -272,8 +283,12 @@ if __name__ == "__main__":
     # 領域が指定されているならパース
     extent = None
     if extent_texts:
-        extent = [list(map(float, extent_texts[0].split(","))),
-                  list(map(float, extent_texts[1].split(",")))]
+        try:
+            extent = [list(map(float, extent_texts[0].split(","))),
+                    list(map(float, extent_texts[1].split(",")))]
+        except ValueError:
+            raise ValueError(
+                "領域指定が不正です：カンマ区切りの経緯度を、スペース区切りで2つ入力してください")
 
     print("making meshes...")
     # メッシュ生成
