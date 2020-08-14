@@ -126,7 +126,7 @@ japanmesh 2
 ## テスト
 
 ### Python
-ルートディレクトリで以下のコマンドでテスト実行
+./pythonディレクトリで以下のコマンドでテスト実行
 
 ```shell
 python -m unittest discover tests
