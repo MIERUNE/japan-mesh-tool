@@ -93,12 +93,12 @@ def get_mesh_size(meshnum: int) -> tuple:
     return x_size, y_size
 
 
-def get_meshes(meshnum, extent=None) -> list:
+def get_meshes(meshnum:int, extent=None) -> list:
     """[summary]
     メッシュ次数および領域から、その領域に重なる全てのメッシュの頂点の経緯度のリストを返す
 
     Args:
-        meshnum ([type]): メッシュ次数
+        meshnum (int): メッシュ次数
         extent (list, optional):  経緯度のペアのリストで領域指定
 
     Returns:
