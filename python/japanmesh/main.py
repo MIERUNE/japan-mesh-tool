@@ -142,8 +142,8 @@ def get_mesh(meshnum: int, x: int, y: int) -> dict:
 
     Args:
         meshnum (int): メッシュ次数
-        x (int): 左から数えたメッシュ番地
-        y (int): 下から数えたメッシュ番地
+        x (int): 原点から右方向に数えたメッシュ番地
+        y (int): 原点から上方向に数えたメッシュ番地
 
     Returns:
         dict: {"geometry":<メッシュのジオメトリ>, "code":<メッシュコード>}
@@ -166,13 +166,13 @@ def get_mesh(meshnum: int, x: int, y: int) -> dict:
     return mesh
 
 
-def get_meshcode(meshnum: int, x_count: int, y_count: int) -> str:
+def get_meshcode(meshnum: int, x: int, y: int) -> str:
     """[summary]
     メッシュ次数、原点から数えたメッシュ番地からメッシュコードを生成
     Args:
         meshnum (int): メッシュ次数
-        x_count (int): 原点からx方向に数えたメッシュ番号
-        y_count (int): 原点からy方向に数えたメッシュ番号
+        x (int): 原点から右方向に数えたメッシュ番地
+        y (int): 原点から上方向に数えたメッシュ番地
 
     Raises:
         Exception: 適切なメッシュ次数が与えられなければ例外をスロー
@@ -182,8 +182,8 @@ def get_meshcode(meshnum: int, x_count: int, y_count: int) -> str:
     """
 
     x_size, y_size = get_mesh_size(meshnum)
-    left_lon = ORIGIN_MIN_LON + x_count * x_size
-    bottom_lat = ORIGIN_MIN_LAT + y_count * y_size
+    left_lon = ORIGIN_MIN_LON + x * x_size
+    bottom_lat = ORIGIN_MIN_LAT + y * y_size
 
     meshcode = ""
     # 緯度を1.5倍した整数値
@@ -193,56 +193,56 @@ def get_meshcode(meshnum: int, x_count: int, y_count: int) -> str:
     if meshnum == 1:
         return meshcode
     elif meshnum == 2:
-        meshcode += str(y_count % 8)
-        meshcode += str(x_count % 8)
+        meshcode += str(y % 8)
+        meshcode += str(x % 8)
         return meshcode
     elif meshnum == 3:
-        meshcode += str(int((y_count % 80) / 10))
-        meshcode += str(int((x_count % 80) / 10))
-        meshcode += str(y_count % 10)
-        meshcode += str(x_count % 10)
+        meshcode += str(int((y % 80) / 10))
+        meshcode += str(int((x % 80) / 10))
+        meshcode += str(y % 10)
+        meshcode += str(x % 10)
         return meshcode
     elif meshnum == 4:
-        meshcode += str(int((y_count % 160) / 20))
-        meshcode += str(int((x_count % 160) / 20))
-        meshcode += str(int((y_count % 20) / 2))
-        meshcode += str(int((x_count % 20) / 2))
-        meshcode += str(y_count % 2)
-        meshcode += str(x_count % 2)
+        meshcode += str(int((y % 160) / 20))
+        meshcode += str(int((x % 160) / 20))
+        meshcode += str(int((y % 20) / 2))
+        meshcode += str(int((x % 20) / 2))
+        meshcode += str(y % 2)
+        meshcode += str(x % 2)
         return meshcode
     elif meshnum == 5:
-        meshcode += str(int((y_count % 320) / 40))
-        meshcode += str(int((x_count % 320) / 40))
-        meshcode += str(int((y_count % 40) / 4))
-        meshcode += str(int((x_count % 40) / 4))
-        meshcode += str(int((y_count % 4) / 2))
-        meshcode += str(int((x_count % 4) / 2))
-        meshcode += str(y_count % 2)
-        meshcode += str(x_count % 2)
+        meshcode += str(int((y % 320) / 40))
+        meshcode += str(int((x % 320) / 40))
+        meshcode += str(int((y % 40) / 4))
+        meshcode += str(int((x % 40) / 4))
+        meshcode += str(int((y % 4) / 2))
+        meshcode += str(int((x % 4) / 2))
+        meshcode += str(y % 2)
+        meshcode += str(x % 2)
         return meshcode
     elif meshnum == 6:
-        meshcode += str(int((y_count % 640) / 80))
-        meshcode += str(int((x_count % 640) / 80))
-        meshcode += str(int((y_count % 80) / 8))
-        meshcode += str(int((x_count % 80) / 8))
-        meshcode += str(int((y_count % 8) / 4))
-        meshcode += str(int((x_count % 8) / 4))
-        meshcode += str(int((y_count % 4) / 2))
-        meshcode += str(int((x_count % 4) / 2))
-        meshcode += str(y_count % 2)
-        meshcode += str(x_count % 2)
+        meshcode += str(int((y % 640) / 80))
+        meshcode += str(int((x % 640) / 80))
+        meshcode += str(int((y % 80) / 8))
+        meshcode += str(int((x % 80) / 8))
+        meshcode += str(int((y % 8) / 4))
+        meshcode += str(int((x % 8) / 4))
+        meshcode += str(int((y % 4) / 2))
+        meshcode += str(int((x % 4) / 2))
+        meshcode += str(y % 2)
+        meshcode += str(x % 2)
         return meshcode
     elif meshnum == 7:
-        meshcode += str(int((y_count % 1600) / 200))
-        meshcode += str(int((x_count % 1600) / 200))
-        meshcode += str(int((y_count % 200) / 20))
-        meshcode += str(int((x_count % 200) / 20))
-        meshcode += str(int((y_count % 20) / 10))
-        meshcode += str(int((x_count % 20) / 10))
-        meshcode += str(int((y_count % 10) / 5))
-        meshcode += str(int((x_count % 10) / 5))
-        meshcode += str(y_count % 5)
-        meshcode += str(x_count % 5)
+        meshcode += str(int((y % 1600) / 200))
+        meshcode += str(int((x % 1600) / 200))
+        meshcode += str(int((y % 200) / 20))
+        meshcode += str(int((x % 200) / 20))
+        meshcode += str(int((y % 20) / 10))
+        meshcode += str(int((x % 20) / 10))
+        meshcode += str(int((y % 10) / 5))
+        meshcode += str(int((x % 10) / 5))
+        meshcode += str(y % 5)
+        meshcode += str(x % 5)
         return meshcode
 
 
