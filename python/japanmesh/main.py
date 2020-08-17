@@ -1,6 +1,6 @@
 import os
 import math
-import json
+import sys
 
 # メッシュコード生成範囲
 MINIMUM_LON = 122.00
@@ -68,7 +68,7 @@ def get_end_offset(meshnum: int, lonlat: list) -> tuple:
 
 def get_meshes(meshnum: int, extent=None) -> list:
     """[summary]
-    メッシュ次数および領域から、その領域に重なる全てのメッシュの頂点の経緯度のリストを返す
+    メッシュ次数および領域から、その領域に重なる全てのメッシュの情報をリストで返す
 
     Args:
         meshnum (int): メッシュ次数
@@ -240,8 +240,8 @@ if __name__ == "__main__":
 
         # 経緯度をバリデーション
         for latlon in extent:
-            for value in latlon:
-                if not -180 < value < 180:
+            for degree in latlon:
+                if not -180 < degree < 180:
                     raise ValueError("経緯度は-180から180の間で指定してください")
 
     print("making meshes...")
@@ -250,20 +250,11 @@ if __name__ == "__main__":
 
     # geojsonl文字列を生成
     geojsonl_txt = ""
-    feature = {
-        "type": "Feature",
-        "geometry": {
-            "type": "Polygon",
-            "coordinates": []
-        },
-        "properties": {
-            "code": ""
-        }
-    }
-    for mesh in meshes:
-        feature["geometry"]["coordinates"] = mesh["geometry"]
-        feature["properties"]["code"] = mesh["code"]
-        geojsonl_txt += json.dumps(feature) + "\n"
+    for i in range(len(meshes)):
+        geojsonl_txt += '{"type":"Feature","geometry":' + \
+            '{"type":"Polygon","coordinates":' + \
+            str(meshes[i]["geometry"]) + \
+            '},"properties":{"code":' + meshes[i]["code"] + '}}\n'
 
     print("writing file...")
     # geojsonl書き出し
