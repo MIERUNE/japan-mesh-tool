@@ -257,7 +257,7 @@ if __name__ == "__main__":
             "coordinates": []
         },
         "properties": {
-            "code": 0
+            "code": ""
         }
     }
     for mesh in meshes:
