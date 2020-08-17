@@ -3,10 +3,21 @@ import math
 import json
 
 # メッシュコード生成範囲
-ORIGIN_MIN_LON = 122.00
-ORIGIN_MAX_LON = 154.00
-ORIGIN_MIN_LAT = 20.00
-ORIGIN_MAX_LAT = 46.00
+MINIMUM_LON = 122.00
+MAXIMUM_LON = 154.00
+MINIMUM_LAT = 20.00
+MAXIMUM_LAT = 46.00
+
+# 1~7次の経緯度でのメッシュサイズ:(x, y)
+MESH_SIZES = [
+    (1, 2/3),
+    (1/8, 1/12),
+    (1/80, 1/120),
+    (1/160, 1/240),
+    (1/320, 1/480),
+    (1/640, 1/960),
+    (1/1600, 1/2400)
+]
 
 
 def get_start_offset(meshnum: int, lonlat: list) -> tuple:
@@ -19,14 +30,14 @@ def get_start_offset(meshnum: int, lonlat: list) -> tuple:
     Returns:
         tuple: (x方向のオフセット、y方向のオフセット)
     """
-    x_mesh_dist, y_mesh_dist = get_mesh_size(meshnum)
+    x_mesh_dist, y_mesh_dist = MESH_SIZES[meshnum - 1]
 
     x_offset = 0
-    while lonlat[0] >= ORIGIN_MIN_LON + x_mesh_dist * (x_offset + 1):
+    while lonlat[0] >= MINIMUM_LON + x_mesh_dist * (x_offset + 1):
         x_offset += 1
 
     y_offset = 0
-    while lonlat[1] >= ORIGIN_MIN_LAT + y_mesh_dist * (y_offset + 1):
+    while lonlat[1] >= MINIMUM_LAT + y_mesh_dist * (y_offset + 1):
         y_offset += 1
 
     return x_offset, y_offset
@@ -42,55 +53,17 @@ def get_end_offset(meshnum: int, lonlat: list) -> tuple:
     Returns:
         tuple: (x方向のオフセット、y方向のオフセット)
     """
-    x_mesh_dist, y_mesh_dist = get_mesh_size(meshnum)
+    x_mesh_dist, y_mesh_dist = MESH_SIZES[meshnum - 1]
 
     x_offset = 0
-    while lonlat[0] <= ORIGIN_MAX_LON - x_mesh_dist * (x_offset + 1):
+    while lonlat[0] <= MAXIMUM_LON - x_mesh_dist * (x_offset + 1):
         x_offset += 1
 
     y_offset = 0
-    while lonlat[1] <= ORIGIN_MAX_LAT - y_mesh_dist * (y_offset + 1):
+    while lonlat[1] <= MAXIMUM_LAT - y_mesh_dist * (y_offset + 1):
         y_offset += 1
 
     return x_offset, y_offset
-
-
-def get_mesh_size(meshnum: int) -> tuple:
-    """[summary]
-    メッシュ次数ごとのメッシュサイズを返す
-
-    Args:
-        meshnum (int): メッシュ次数
-
-    Returns:
-        tuple: 1メッシュあたりの(経度サイズ, 緯度サイズ)
-    """
-    x_size = 0
-    y_size = 0
-
-    if meshnum == 1:
-        x_size = 1
-        y_size = 2/3
-    elif meshnum == 2:
-        x_size = 1/8
-        y_size = 1/12
-    elif meshnum == 3:
-        x_size = 1/80
-        y_size = 1/120
-    elif meshnum == 4:
-        x_size = 1/160
-        y_size = 1/240
-    elif meshnum == 5:
-        x_size = 1/320
-        y_size = 1/480
-    elif meshnum == 6:
-        x_size = 1/640
-        y_size = 1/960
-    elif meshnum == 7:
-        x_size = 1/1600
-        y_size = 1/2400
-
-    return x_size, y_size
 
 
 def get_meshes(meshnum: int, extent=None) -> list:
@@ -106,9 +79,9 @@ def get_meshes(meshnum: int, extent=None) -> list:
     """
 
     # メッシュのx方向y方向それぞれの数
-    x_size, y_size = get_mesh_size(meshnum)
-    x_mesh_count = math.ceil((ORIGIN_MAX_LON - ORIGIN_MIN_LON) / x_size)
-    y_mesh_count = math.ceil((ORIGIN_MAX_LAT - ORIGIN_MIN_LAT) / y_size)
+    x_size, y_size = MESH_SIZES[meshnum - 1]
+    x_mesh_count = math.ceil((MAXIMUM_LON - MINIMUM_LON) / x_size)
+    y_mesh_count = math.ceil((MAXIMUM_LAT - MINIMUM_LAT) / y_size)
 
     # スキップすべきメッシュの数＝オフセットを計算
     start_offset = [0, 0]
@@ -148,102 +121,77 @@ def get_mesh(meshnum: int, x: int, y: int) -> dict:
     Returns:
         dict: {"geometry":<メッシュのジオメトリ>, "code":<メッシュコード>}
     """
-    x_size, y_size = get_mesh_size(meshnum)
-    leftbottom = [ORIGIN_MIN_LON + x * x_size,
-                  ORIGIN_MIN_LAT + y * y_size]
-    righttop = [ORIGIN_MIN_LON + (x + 1) * x_size,
-                ORIGIN_MIN_LAT + (y + 1) * y_size]
-    mesh = {
-        "geometry": [[
-            leftbottom,
-            [leftbottom[0], righttop[1]],
-            righttop,
-            [righttop[0], leftbottom[1]],
-            leftbottom
-        ]],
-        "code": get_meshcode(meshnum, x, y)
-    }
-    return mesh
+    x_size, y_size = MESH_SIZES[meshnum - 1]
+    left_lon = MINIMUM_LON + x * x_size
+    bottom_lat = MINIMUM_LAT + y * y_size
+    right_lon = MINIMUM_LON + (x + 1) * x_size
+    top_lat = MINIMUM_LAT + (y + 1) * y_size
 
-
-def get_meshcode(meshnum: int, x: int, y: int) -> str:
-    """[summary]
-    メッシュ次数、原点から数えたメッシュ番地からメッシュコードを生成
-    Args:
-        meshnum (int): メッシュ次数
-        x (int): 原点から右方向に数えたメッシュ番地
-        y (int): 原点から上方向に数えたメッシュ番地
-
-    Raises:
-        Exception: 適切なメッシュ次数が与えられなければ例外をスロー
-
-    Returns:
-        str: メッシュコード
-    """
-
-    x_size, y_size = get_mesh_size(meshnum)
-    left_lon = ORIGIN_MIN_LON + x * x_size
-    bottom_lat = ORIGIN_MIN_LAT + y * y_size
-
-    meshcode = ""
+    code = ""
     # 緯度を1.5倍した整数値
-    meshcode += str(int(bottom_lat * 1.5))
+    code += str(int(bottom_lat * 1.5))
     # 経度の整数部分の下2桁
-    meshcode += str(int(left_lon))[1:]
+    code += str(int(left_lon))[1:]
+    # 以下、メッシュ次数に応じてコードを2桁ずつ付加
     if meshnum == 1:
-        return meshcode
+        pass
     elif meshnum == 2:
-        meshcode += str(y % 8)
-        meshcode += str(x % 8)
-        return meshcode
+        code += str(y % 8)
+        code += str(x % 8)
     elif meshnum == 3:
-        meshcode += str(int((y % 80) / 10))
-        meshcode += str(int((x % 80) / 10))
-        meshcode += str(y % 10)
-        meshcode += str(x % 10)
-        return meshcode
+        code += str(int((y % 80) / 10))
+        code += str(int((x % 80) / 10))
+        code += str(y % 10)
+        code += str(x % 10)
     elif meshnum == 4:
-        meshcode += str(int((y % 160) / 20))
-        meshcode += str(int((x % 160) / 20))
-        meshcode += str(int((y % 20) / 2))
-        meshcode += str(int((x % 20) / 2))
-        meshcode += str(y % 2)
-        meshcode += str(x % 2)
-        return meshcode
+        code += str(int((y % 160) / 20))
+        code += str(int((x % 160) / 20))
+        code += str(int((y % 20) / 2))
+        code += str(int((x % 20) / 2))
+        code += str(y % 2)
+        code += str(x % 2)
     elif meshnum == 5:
-        meshcode += str(int((y % 320) / 40))
-        meshcode += str(int((x % 320) / 40))
-        meshcode += str(int((y % 40) / 4))
-        meshcode += str(int((x % 40) / 4))
-        meshcode += str(int((y % 4) / 2))
-        meshcode += str(int((x % 4) / 2))
-        meshcode += str(y % 2)
-        meshcode += str(x % 2)
-        return meshcode
+        code += str(int((y % 320) / 40))
+        code += str(int((x % 320) / 40))
+        code += str(int((y % 40) / 4))
+        code += str(int((x % 40) / 4))
+        code += str(int((y % 4) / 2))
+        code += str(int((x % 4) / 2))
+        code += str(y % 2)
+        code += str(x % 2)
     elif meshnum == 6:
-        meshcode += str(int((y % 640) / 80))
-        meshcode += str(int((x % 640) / 80))
-        meshcode += str(int((y % 80) / 8))
-        meshcode += str(int((x % 80) / 8))
-        meshcode += str(int((y % 8) / 4))
-        meshcode += str(int((x % 8) / 4))
-        meshcode += str(int((y % 4) / 2))
-        meshcode += str(int((x % 4) / 2))
-        meshcode += str(y % 2)
-        meshcode += str(x % 2)
-        return meshcode
+        code += str(int((y % 640) / 80))
+        code += str(int((x % 640) / 80))
+        code += str(int((y % 80) / 8))
+        code += str(int((x % 80) / 8))
+        code += str(int((y % 8) / 4))
+        code += str(int((x % 8) / 4))
+        code += str(int((y % 4) / 2))
+        code += str(int((x % 4) / 2))
+        code += str(y % 2)
+        code += str(x % 2)
     elif meshnum == 7:
-        meshcode += str(int((y % 1600) / 200))
-        meshcode += str(int((x % 1600) / 200))
-        meshcode += str(int((y % 200) / 20))
-        meshcode += str(int((x % 200) / 20))
-        meshcode += str(int((y % 20) / 10))
-        meshcode += str(int((x % 20) / 10))
-        meshcode += str(int((y % 10) / 5))
-        meshcode += str(int((x % 10) / 5))
-        meshcode += str(y % 5)
-        meshcode += str(x % 5)
-        return meshcode
+        code += str(int((y % 1600) / 200))
+        code += str(int((x % 1600) / 200))
+        code += str(int((y % 200) / 20))
+        code += str(int((x % 200) / 20))
+        code += str(int((y % 20) / 10))
+        code += str(int((x % 20) / 10))
+        code += str(int((y % 10) / 5))
+        code += str(int((x % 10) / 5))
+        code += str(y % 5)
+        code += str(x % 5)
+
+    return {
+        "geometry": [[
+            [left_lon, bottom_lat],
+            [left_lon, top_lat],
+            [right_lon, top_lat],
+            [right_lon, bottom_lat],
+            [left_lon, bottom_lat]
+        ]],
+        "code": code
+    }
 
 
 if __name__ == "__main__":
@@ -290,11 +238,11 @@ if __name__ == "__main__":
             raise ValueError(
                 "領域指定が不正です：カンマ区切りの経緯度を、スペース区切りで2つ入力してください")
 
-    # 経緯度をバリデーション
-    for latlon in extent:
-        for value in latlon:
-            if not -180 < value < 180:
-                raise ValueError("経緯度は-180から180の間で指定してください")
+        # 経緯度をバリデーション
+        for latlon in extent:
+            for value in latlon:
+                if not -180 < value < 180:
+                    raise ValueError("経緯度は-180から180の間で指定してください")
 
     print("making meshes...")
     # メッシュ生成
