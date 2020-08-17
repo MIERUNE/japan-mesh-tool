@@ -93,7 +93,7 @@ def get_mesh_size(meshnum: int) -> tuple:
     return x_size, y_size
 
 
-def get_meshes(meshnum:int, extent=None) -> list:
+def get_meshes(meshnum: int, extent=None) -> list:
     """[summary]
     メッシュ次数および領域から、その領域に重なる全てのメッシュの頂点の経緯度のリストを返す
 
@@ -285,7 +285,7 @@ if __name__ == "__main__":
     if extent_texts:
         try:
             extent = [list(map(float, extent_texts[0].split(","))),
-                    list(map(float, extent_texts[1].split(",")))]
+                      list(map(float, extent_texts[1].split(",")))]
         except ValueError:
             raise ValueError(
                 "領域指定が不正です：カンマ区切りの経緯度を、スペース区切りで2つ入力してください")
@@ -295,7 +295,7 @@ if __name__ == "__main__":
         for value in latlon:
             if not -180 < value < 180:
                 raise ValueError("経緯度は-180から180の間で指定してください")
-    
+
     print("making meshes...")
     # メッシュ生成
     meshes = get_meshes(meshnum, extent)
