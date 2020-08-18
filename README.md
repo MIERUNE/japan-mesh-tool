@@ -28,8 +28,8 @@
 - ./python/japanmeshをPythonモジュールとして使用可能
 
 ### バイナリ版(Rust, experimental)
-- macOS向けは./rust/japan-mesh
-- Windows向けは./rust/japan-mesh.exe
+- macOS向けは./rust/japanmesh
+- Windows向けは./rust/japanmesh.exe
     - いずれも64bit向け
 
 ## 使い方
