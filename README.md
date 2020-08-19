@@ -42,7 +42,7 @@
 ### Python版
 
 ```
-python python/japanmesh/main.py <meshnum:メッシュ次数> <-e:領域指定、"カンマ区切り経緯度 カンマ区切り経緯度"形式で指定> <-d:保存先>
+python python/japanmesh/main.py <meshnum:メッシュ次数> <-e:領域指定、"カンマ区切り左下経緯度 カンマ区切り右上経緯度"形式で指定> <-d:保存先>
 ```
 
 - 領域指定(-e),保存先(-d)はオプションです
