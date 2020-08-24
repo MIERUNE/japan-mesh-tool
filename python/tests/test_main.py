@@ -53,8 +53,6 @@ class TestMain(TestCase):
         self.assertEqual(get_mesh(3, 79, 79)["code"], "30227799")
         self.assertEqual(get_mesh(3, 80, 80)["code"], "31230000")
 
-        # 4次以降上記と同じ法則でコードを割り振り
-
     def test_get_meshes(self):
         # 1次メッシュを計算
         meshes = get_meshes(1)

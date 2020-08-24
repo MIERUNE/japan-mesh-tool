@@ -8,7 +8,7 @@ MAXIMUM_LON = 154.00
 MINIMUM_LAT = 20.00
 MAXIMUM_LAT = 46.00
 
-# 1~7次の経緯度でのメッシュサイズ:(x, y)
+# メッシュ番号順で経緯度でのメッシュサイズを定義:(x, y)
 MESH_SIZES = [
     (1, 2/3),
     (1/8, 1/12),
@@ -16,7 +16,9 @@ MESH_SIZES = [
     (1/160, 1/240),
     (1/320, 1/480),
     (1/640, 1/960),
-    (1/1600, 1/2400)
+    (1/800, 1/1200),
+    (1/1600, 1/2400),
+    (1/8000, 1/12000),
 ]
 
 
@@ -133,6 +135,9 @@ def get_mesh(meshnum: int, x: int, y: int) -> dict:
     # 経度の整数部分の下2桁
     code += str(int(left_lon))[1:]
     # 以下、メッシュ次数に応じてコードを2桁ずつ付加
+    # 1-3:標準地域メッシュ
+    # 4-6:分割地域メッシュ
+    # 7以降:その他
     if meshnum == 1:
         pass
     elif meshnum == 2:
@@ -148,39 +153,47 @@ def get_mesh(meshnum: int, x: int, y: int) -> dict:
         code += str(int((x % 160) / 20))
         code += str(int((y % 20) / 2))
         code += str(int((x % 20) / 2))
-        code += str(y % 2)
-        code += str(x % 2)
+        code += str((int(y % 2) * 2) + (int(x % 2) + 1))
     elif meshnum == 5:
         code += str(int((y % 320) / 40))
         code += str(int((x % 320) / 40))
         code += str(int((y % 40) / 4))
         code += str(int((x % 40) / 4))
-        code += str(int((y % 4) / 2))
-        code += str(int((x % 4) / 2))
-        code += str(y % 2)
-        code += str(x % 2)
+        code += str((int(y % 4 / 2) * 2) + (int(x % 4 / 2) + 1))
+        code += str((int(y % 2) * 2) + (int(x % 2) + 1))
     elif meshnum == 6:
         code += str(int((y % 640) / 80))
         code += str(int((x % 640) / 80))
         code += str(int((y % 80) / 8))
         code += str(int((x % 80) / 8))
-        code += str(int((y % 8) / 4))
-        code += str(int((x % 8) / 4))
-        code += str(int((y % 4) / 2))
-        code += str(int((x % 4) / 2))
-        code += str(y % 2)
-        code += str(x % 2)
+        code += str((int(y % 8 / 4) * 2) + (int(x % 8 / 4) + 1))
+        code += str((int(y % 4 / 2) * 2) + (int(x % 4 / 2) + 1))
+        code += str((int(y % 2) * 2) + (int(x % 2) + 1))
     elif meshnum == 7:
+        code += str(int((y % 800) / 100))
+        code += str(int((x % 800) / 100))
+        code += str(int(y % 100 / 10))
+        code += str(int(x % 100 / 10))
+        code += str(y % 10)
+        code += str(x % 10)
+    elif meshnum == 8:
         code += str(int((y % 1600) / 200))
         code += str(int((x % 1600) / 200))
-        code += str(int((y % 200) / 20))
-        code += str(int((x % 200) / 20))
-        code += str(int((y % 20) / 10))
-        code += str(int((x % 20) / 10))
-        code += str(int((y % 10) / 5))
-        code += str(int((x % 10) / 5))
-        code += str(y % 5)
-        code += str(x % 5)
+        code += str(int(y % 200 / 20))
+        code += str(int(x % 200 / 20))
+        code += str(int(y % 20 / 2))
+        code += str(int(x % 20 / 2))
+        code += str(y % 2)
+        code += str(x % 2)
+    elif meshnum == 9:
+        code += str(int((y % 8000) / 1000))
+        code += str(int((x % 8000) / 1000))
+        code += str(int(y % 1000 / 100))
+        code += str(int(x % 1000 / 100))
+        code += str(int(y % 100 / 10))
+        code += str(int(x % 100 / 10))
+        code += str(y % 10)
+        code += str(x % 10)
 
     return {
         "geometry": [[
@@ -195,11 +208,11 @@ def get_mesh(meshnum: int, x: int, y: int) -> dict:
 
 
 if __name__ == "__main__":
-    import argschems
+    import argschemes
 
     print("initializing...")
     # コマンド初期化
-    args = argschems.ARGSCHEME.parse_args()
+    args = argschemes.ARGSCHEME.parse_args()
 
     # メッシュ番号
     try:
@@ -215,10 +228,14 @@ if __name__ == "__main__":
         meshnum = 5
     elif meshnum == 125:
         meshnum = 6
-    elif meshnum == 50:
+    elif meshnum == 100:
         meshnum = 7
+    elif meshnum == 50:
+        meshnum = 8
+    elif meshnum == 10:
+        meshnum = 9
 
-    if meshnum < 1 or 7 < meshnum:
+    if meshnum < 1 or 9 < meshnum:
         raise ValueError("メッシュ次数を正しく入力してください あなたの入力：" + str(args.meshnum))
 
     extent_texts = args.extent
