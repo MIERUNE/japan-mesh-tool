@@ -134,12 +134,12 @@ fn get_meshcode(meshnum: u8, x: usize, y: usize) -> String {
             meshcode.push_str(&(x % 2).to_string());
         }
         9 => {
-            meshcode.push_str(&(y % 1600 / 200).to_string());
-            meshcode.push_str(&(x % 1600 / 200).to_string());
-            meshcode.push_str(&(y % 200 / 20).to_string());
-            meshcode.push_str(&(x % 200 / 20).to_string());
-            meshcode.push_str(&(y % 20 / 2).to_string());
-            meshcode.push_str(&(x % 20 / 2).to_string());
+            meshcode.push_str(&(y % 8000 / 1000).to_string());
+            meshcode.push_str(&(x % 8000 / 1000).to_string());
+            meshcode.push_str(&(y % 1000 / 100).to_string());
+            meshcode.push_str(&(x % 1000 / 100).to_string());
+            meshcode.push_str(&(y % 100 / 10).to_string());
+            meshcode.push_str(&(x % 100 / 10).to_string());
             meshcode.push_str(&(y % 10).to_string());
             meshcode.push_str(&(x % 10).to_string());
         }
