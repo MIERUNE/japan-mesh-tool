@@ -47,13 +47,27 @@ class TestMain(TestCase):
         self.assertEqual(get_mesh(2, 8, 8)["code"], "312300")
 
         # 3次メッシュ
+        self.assertEqual(get_mesh(3, 0, 0)["code"], "30220000")
         self.assertEqual(get_mesh(3, 1, 1)["code"], "30220011")
         self.assertEqual(get_mesh(3, 9, 9)["code"], "30220099")
         self.assertEqual(get_mesh(3, 10, 10)["code"], "30221100")
         self.assertEqual(get_mesh(3, 79, 79)["code"], "30227799")
         self.assertEqual(get_mesh(3, 80, 80)["code"], "31230000")
 
-        # 4次以降上記と同じ法則でコードを割り振り
+        # 4~6:分割地域メッシュ
+        self.assertEqual(get_mesh(4, 0, 0)["code"], "302200001")
+        self.assertEqual(get_mesh(4, 1, 0)["code"], "302200002")
+        self.assertEqual(get_mesh(4, 0, 1)["code"], "302200003")
+        self.assertEqual(get_mesh(4, 1, 1)["code"], "302200004")
+        self.assertEqual(get_mesh(4, 2, 2)["code"], "302200111")
+
+        # 7~:その他メッシュ
+        self.assertEqual(get_mesh(7, 0, 0)["code"], "3022000000")
+        self.assertEqual(get_mesh(7, 0, 1)["code"], "3022000010")
+        self.assertEqual(get_mesh(7, 1, 0)["code"], "3022000001")
+        self.assertEqual(get_mesh(7, 1, 1)["code"], "3022000011")
+        self.assertEqual(get_mesh(7, 9, 9)["code"], "3022000099")
+        self.assertEqual(get_mesh(7, 10, 10)["code"], "3022001100")
 
     def test_get_meshes(self):
         # 1次メッシュを計算

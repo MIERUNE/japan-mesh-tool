@@ -96,42 +96,52 @@ fn get_meshcode(meshnum: u8, x: usize, y: usize) -> String {
             meshcode.push_str(&(x % 160 / 20).to_string());
             meshcode.push_str(&(y % 20 / 2).to_string());
             meshcode.push_str(&(x % 20 / 2).to_string());
-            meshcode.push_str(&(y % 2).to_string());
-            meshcode.push_str(&(x % 2).to_string());
+            meshcode.push_str(&(y % 2 * 2 + x % 2 + 1).to_string());
         }
         5 => {
             meshcode.push_str(&(y % 320 / 40).to_string());
             meshcode.push_str(&(x % 320 / 40).to_string());
             meshcode.push_str(&(y % 40 / 4).to_string());
             meshcode.push_str(&(x % 40 / 4).to_string());
-            meshcode.push_str(&(y % 4 / 2).to_string());
-            meshcode.push_str(&(x % 4 / 2).to_string());
-            meshcode.push_str(&(y % 2).to_string());
-            meshcode.push_str(&(x % 2).to_string());
+            meshcode.push_str(&(y % 4 / 2 * 2 + x % 4 / 2 + 1).to_string());
+            meshcode.push_str(&(y % 2 * 2 + x % 2 + 1).to_string());
         }
         6 => {
             meshcode.push_str(&(y % 640 / 80).to_string());
             meshcode.push_str(&(x % 640 / 80).to_string());
             meshcode.push_str(&(y % 80 / 8).to_string());
             meshcode.push_str(&(x % 80 / 8).to_string());
-            meshcode.push_str(&(y % 8 / 4).to_string());
-            meshcode.push_str(&(x % 8 / 4).to_string());
-            meshcode.push_str(&(y % 4 / 2).to_string());
-            meshcode.push_str(&(x % 4 / 2).to_string());
-            meshcode.push_str(&(y % 2).to_string());
-            meshcode.push_str(&(x % 2).to_string());
+            meshcode.push_str(&(y % 8 / 4 * 2 + x % 8 / 4 + 1).to_string());
+            meshcode.push_str(&(y % 4 / 2 * 2 + x % 4 / 2 + 1).to_string());
+            meshcode.push_str(&(y % 2 * 2 + x % 2 + 1).to_string());
         }
         7 => {
+            meshcode.push_str(&(y % 800 / 100).to_string());
+            meshcode.push_str(&(x % 800 / 100).to_string());
+            meshcode.push_str(&(y % 100 / 10).to_string());
+            meshcode.push_str(&(x % 100 / 10).to_string());
+            meshcode.push_str(&(y % 10).to_string());
+            meshcode.push_str(&(x % 10).to_string());
+        }
+        8 => {
             meshcode.push_str(&(y % 1600 / 200).to_string());
             meshcode.push_str(&(x % 1600 / 200).to_string());
             meshcode.push_str(&(y % 200 / 20).to_string());
             meshcode.push_str(&(x % 200 / 20).to_string());
-            meshcode.push_str(&(y % 20 / 10).to_string());
-            meshcode.push_str(&(x % 20 / 10).to_string());
-            meshcode.push_str(&(y % 10 / 5).to_string());
-            meshcode.push_str(&(x % 10 / 5).to_string());
-            meshcode.push_str(&(y % 5).to_string());
-            meshcode.push_str(&(x % 5).to_string());
+            meshcode.push_str(&(y % 20 / 2).to_string());
+            meshcode.push_str(&(x % 20 / 2).to_string());
+            meshcode.push_str(&(y % 2).to_string());
+            meshcode.push_str(&(x % 2).to_string());
+        }
+        9 => {
+            meshcode.push_str(&(y % 8000 / 1000).to_string());
+            meshcode.push_str(&(x % 8000 / 1000).to_string());
+            meshcode.push_str(&(y % 1000 / 100).to_string());
+            meshcode.push_str(&(x % 1000 / 100).to_string());
+            meshcode.push_str(&(y % 100 / 10).to_string());
+            meshcode.push_str(&(x % 100 / 10).to_string());
+            meshcode.push_str(&(y % 10).to_string());
+            meshcode.push_str(&(x % 10).to_string());
         }
         _ => (),
     }
@@ -189,7 +199,9 @@ fn get_mesh_size(meshnum: u8) -> (f64, f64) {
         4 => (1.0 / 160.0, 1.0 / 240.0),
         5 => (1.0 / 320.0, 1.0 / 480.0),
         6 => (1.0 / 640.0, 1.0 / 960.0),
-        7 => (1.0 / 1600.0, 1.0 / 2400.0),
+        7 => (1.0 / 800.0, 1.0 / 1200.0),
+        8 => (1.0 / 1600.0, 1.0 / 2400.0),
+        9 => (1.0 / 8000.0, 1.0 / 12000.0),
         _ => (0.0, 0.0),
     }
 }
