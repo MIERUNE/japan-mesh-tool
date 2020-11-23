@@ -27,8 +27,8 @@ def get_meshsize(meshnum: int) -> [float, float]:
     if meshnum == 1:
         return FIRST_MESH_SIZE
 
-    meshinfo = MESH_INFOS[str(meshnum)]
-    parent_meshsize = get_meshsize(int(meshinfo["parent"]))
+    meshinfo = MESH_INFOS[meshnum]
+    parent_meshsize = get_meshsize((meshinfo["parent"]))
     meshsize = [
         parent_meshsize[0] / meshinfo["ratio"],
         parent_meshsize[1] / meshinfo["ratio"],
@@ -146,18 +146,18 @@ def get_meshcode(meshnum: int, x: int, y: int) -> str:
     # 1-3:標準地域メッシュ
     # 4-6:分割地域メッシュ
     # 7以降:その他
-    ratio = MESH_INFOS[str(meshnum)]["ratio"]
-    parent = MESH_INFOS[str(meshnum)]["parent"]
+    ratio = MESH_INFOS[meshnum]["ratio"]
+    parent = MESH_INFOS[meshnum]["parent"]
     if meshnum == 1:
         # 1次コード：緯度を1.5倍した整数値 + 経度の整数部分の下2桁
         return ""
     elif meshnum == 4 or meshnum == 5 or meshnum == 6:
-        return get_meshcode(int(parent), math.floor(x / ratio), math.floor(y / ratio)) + str((y % ratio) * 2 + (x % ratio) + 1)
+        return get_meshcode(parent, math.floor(x / ratio), math.floor(y / ratio)) + str((y % ratio) * 2 + (x % ratio) + 1)
     else:
-        return get_meshcode(int(parent), math.floor(x / ratio), math.floor(y / ratio)) + str(y % ratio) + str(x % ratio)
+        return get_meshcode(parent, math.floor(x / ratio), math.floor(y / ratio)) + str(y % ratio) + str(x % ratio)
 
 
-@lru_cache(maxsize=None)
+@ lru_cache(maxsize=None)
 def get_mesh_vertex(x: int, x_size: float, y: int, y_size: float) -> (float, float):
     return MINIMUM_LON + x * x_size, MINIMUM_LAT + y * y_size
 
