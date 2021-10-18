@@ -177,7 +177,6 @@ def get_mesh(meshnum: int, x: int, y: int) -> dict:
     x_size, y_size = get_meshsize(meshnum)
     left_lon, bottom_lat = get_mesh_vertex(x, x_size, y, y_size)
     right_lon, top_lat = get_mesh_vertex(x + 1, x_size, y + 1, y_size)
-
     return {
         "geometry": [[
             [left_lon, bottom_lat],
@@ -186,7 +185,7 @@ def get_mesh(meshnum: int, x: int, y: int) -> dict:
             [right_lon, bottom_lat],
             [left_lon, bottom_lat]
         ]],
-        "code": str(int(bottom_lat * 1.5)) + str(int(left_lon))[1:] + get_meshcode(meshnum, x, y)
+        "code": str(round(bottom_lat * 1.5)) + str(round(left_lon))[1:] + get_meshcode(meshnum, x, y)
     }
 
 
