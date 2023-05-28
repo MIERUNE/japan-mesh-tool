@@ -162,6 +162,20 @@ def get_mesh_vertex(x: int, x_size: float, y: int, y_size: float) -> (float, flo
     return MINIMUM_LON + x * x_size, MINIMUM_LAT + y * y_size
 
 
+@lru_cache(maxsize=None)
+def get_base_cellcount(meshnum: int) -> (int, int, int):
+    unitcount = math.prod([info["ratio"] for idx, info in enumerate(MESH_INFOS) if 0 < idx <= meshnum])
+
+    if not MINIMUM_LON.is_integer():
+        raise Exception(f'Unexpected MINIMUM_LON: {MINIMUM_LON}')
+    if not MINIMUM_LAT.is_integer() or not (math.floor(MINIMUM_LAT) * 1.5).is_integer():
+        raise Exception(f'Unexpected MINIMUM_LAT: {MINIMUM_LAT}')
+    x = (math.floor(MINIMUM_LON) - 100) * unitcount
+    y = math.floor(math.floor(MINIMUM_LAT) * 1.5) * unitcount
+
+    return x, y, unitcount
+
+
 def get_mesh(meshnum: int, x: int, y: int) -> dict:
     """[summary]
     メッシュ次数、メッシュ番地からメッシュのジオメトリとメッシュコードを返す
@@ -177,6 +191,14 @@ def get_mesh(meshnum: int, x: int, y: int) -> dict:
     x_size, y_size = get_meshsize(meshnum)
     left_lon, bottom_lat = get_mesh_vertex(x, x_size, y, y_size)
     right_lon, top_lat = get_mesh_vertex(x + 1, x_size, y + 1, y_size)
+
+    base_x, base_y, unitcount = get_base_cellcount(meshnum)
+
+    x_1st = (x + base_x) // unitcount
+    y_1st = (y + base_y) // unitcount
+
+    code = str(y_1st) + str(x_1st) + get_meshcode(meshnum, x, y)
+
     return {
         "geometry": [[
             [left_lon, bottom_lat],
@@ -185,7 +207,7 @@ def get_mesh(meshnum: int, x: int, y: int) -> dict:
             [right_lon, bottom_lat],
             [left_lon, bottom_lat]
         ]],
-        "code": str(round(bottom_lat * 1.5)) + str(round(left_lon))[1:] + get_meshcode(meshnum, x, y)
+        "code": code
     }
 
 
