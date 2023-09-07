@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "japan-mesh-tool"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "japanmesh", from = "python"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pytest = "^7.4.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.287"
+black = "^23.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

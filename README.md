@@ -3,12 +3,10 @@
 日本の標準地域メッシュを生成するツール
 
 <!-- TOC -->
-
+- [環境構築(poetry)](環境構築(poetry))
 - [実行環境](#実行環境)
-  - [Python版](#python版)
 - [使い方](#使い方)
   - [出力形式](#出力形式)
-  - [Python版](#python版-1)
 - [Pythonモジュールとして](#pythonモジュールとして)
 - [対応メッシュ次数](#対応メッシュ次数)
   - [標準地域メッシュ](#標準地域メッシュ)
@@ -16,16 +14,32 @@
   - [その他地域メッシュ](#その他地域メッシュ)
   - [メッシュ番号の割り振りについて](#メッシュ番号の割り振りについて)
 - [テスト](#テスト)
-  - [Python版](#python版-2)
-- [Rust版（試験版）](#rust版試験版)
   - [バイナリ](#バイナリ)
   - [コマンド例](#コマンド例)
 
 <!-- /TOC -->
 
-## 実行環境
+## 環境構築(poetry)
 
-### Python版
+- poetryをインストール
+
+```
+pip3 install poetry
+```
+
+- 個別の環境で、poetryの仮想環境を動かすようにするには(任意)
+
+```
+poetry config virtualenvs.in-project true
+```
+
+- 当プロジェクトへpoetryをインストール
+
+```
+poetry install
+```
+
+## 実行環境
 
 - Python3.8で開発
 - メインスクリプトは./python/japanmesh/main.py
@@ -38,10 +52,8 @@
 - 行区切りGeoJSON、いわゆるgeojsonl形式（=GeoJsonSeq形式）で出力
 - 出力例：./sample/mesh_5.geojsonl
 
-### Python版
-
 ```
-python python/japanmesh/main.py <meshnum:メッシュ次数> <-e:領域指定、"カンマ区切り左下経緯度 カンマ区切り右上経緯度"形式で指定> <-d:保存先>
+poetry run python python/japanmesh/main.py <meshnum:メッシュ次数> <-e:領域指定、"カンマ区切り左下経緯度 カンマ区切り右上経緯度"形式で指定> <-d:保存先>
 ```
 
 - 領域指定(-e),保存先(-d)はオプションです
@@ -51,19 +63,19 @@ python python/japanmesh/main.py <meshnum:メッシュ次数> <-e:領域指定、
 #### コマンド例
 
 ```
-python python/japanmesh/main.py 5 -e 142.2,44.0 142.3,44.5 -d ./
+poetry run python python/japanmesh/main.py 5 -e 142.2,44.0 142.3,44.5 -d ./
 ```
 
 4次メッシュ以上は別称で指定する事が出来ます
 
 ```
-python python/japanmesh/main.py 250m -e 142.2,44.0 142.3,44.5 -d ./
+poetry run python python/japanmesh/main.py 250m -e 142.2,44.0 142.3,44.5 -d ./
 ```
 
 全国分の1次メッシュをカレントディレクトリに出力する場合
 
 ```
-python python/japanmesh/main.py 1
+poetry run python python/japanmesh/main.py 1
 ```
 
 ## Pythonモジュールとして
@@ -136,12 +148,10 @@ python python/japanmesh/main.py 1
 
 ## テスト
 
-### Python版
-
 ./pythonディレクトリで以下のコマンドでテスト実行
 
 ```shell
-python -m unittest discover tests
+poetry run python -m unittest discover tests
 ```
 
 ### コマンド例
