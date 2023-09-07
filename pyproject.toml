@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
-packages = [{include = "japan_mesh_tool"}]
+packages = [{include = "japanmesh", from = "python"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
