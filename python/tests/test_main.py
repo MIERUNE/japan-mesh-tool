@@ -37,6 +37,7 @@ class TestMain(TestCase):
         self.assertEqual(get_mesh(1, 1, 0)["code"], "3023")
         self.assertEqual(get_mesh(1, 0, 1)["code"], "3122")
         self.assertEqual(get_mesh(1, 1, 1)["code"], "3123")
+        self.assertEqual(get_mesh(1, 12, 21)["code"], "5134")
 
         # 2次メッシュ
         self.assertEqual(get_mesh(2, 0, 0)["code"], "302200")
@@ -45,6 +46,11 @@ class TestMain(TestCase):
         self.assertEqual(get_mesh(2, 1, 1)["code"], "302211")
         self.assertEqual(get_mesh(2, 7, 7)["code"], "302277")
         self.assertEqual(get_mesh(2, 8, 8)["code"], "312300")
+        self.assertEqual(get_mesh(2, 98, 174)["code"], "513462")
+        self.assertEqual(get_mesh(2, 116, 176)["code"], "523604")
+        self.assertEqual(get_mesh(2, 117, 176)["code"], "523605")
+        self.assertEqual(get_mesh(2, 116, 184)["code"], "533604")
+        self.assertEqual(get_mesh(2, 116, 185)["code"], "533614")
 
         # 3次メッシュ
         self.assertEqual(get_mesh(3, 0, 0)["code"], "30220000")
@@ -53,6 +59,7 @@ class TestMain(TestCase):
         self.assertEqual(get_mesh(3, 10, 10)["code"], "30221100")
         self.assertEqual(get_mesh(3, 79, 79)["code"], "30227799")
         self.assertEqual(get_mesh(3, 80, 80)["code"], "31230000")
+        self.assertEqual(get_mesh(3, 988, 1741)["code"], "51346218")
 
         # 4~6:分割地域メッシュ
         self.assertEqual(get_mesh(4, 0, 0)["code"], "302200001")
@@ -60,6 +67,7 @@ class TestMain(TestCase):
         self.assertEqual(get_mesh(4, 0, 1)["code"], "302200003")
         self.assertEqual(get_mesh(4, 1, 1)["code"], "302200004")
         self.assertEqual(get_mesh(4, 2, 2)["code"], "302200111")
+        self.assertEqual(get_mesh(4, 1976, 3483)["code"], "513462183")
 
         # 7~:その他メッシュ
         self.assertEqual(get_mesh(7, 0, 0)["code"], "3022000000")
