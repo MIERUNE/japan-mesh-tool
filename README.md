@@ -3,12 +3,10 @@
 日本の標準地域メッシュを生成するツール
 
 <!-- TOC -->
-- [環境構築(poetry)](環境構築(poetry))
+- [環境構築(poetry)](#環境構築(poetry))
 - [実行環境](#実行環境)
-  - [Python版](#python版)
 - [使い方](#使い方)
   - [出力形式](#出力形式)
-  - [Python版](#python版-1)
 - [Pythonモジュールとして](#pythonモジュールとして)
 - [対応メッシュ次数](#対応メッシュ次数)
   - [標準地域メッシュ](#標準地域メッシュ)
@@ -16,8 +14,6 @@
   - [その他地域メッシュ](#その他地域メッシュ)
   - [メッシュ番号の割り振りについて](#メッシュ番号の割り振りについて)
 - [テスト](#テスト)
-  - [Python版](#python版-2)
-- [Rust版（試験版）](#rust版試験版)
   - [バイナリ](#バイナリ)
   - [コマンド例](#コマンド例)
 
@@ -45,8 +41,6 @@ poetry install
 
 ## 実行環境
 
-### Python版
-
 - Python3.8で開発
 - メインスクリプトは./python/japanmesh/main.py
 - ./python/japanmeshをPythonモジュールとして使用可能
@@ -57,8 +51,6 @@ poetry install
 
 - 行区切りGeoJSON、いわゆるgeojsonl形式（=GeoJsonSeq形式）で出力
 - 出力例：./sample/mesh_5.geojsonl
-
-### Python版
 
 ```
 poetry run python python/japanmesh/main.py <meshnum:メッシュ次数> <-e:領域指定、"カンマ区切り左下経緯度 カンマ区切り右上経緯度"形式で指定> <-d:保存先>
@@ -156,31 +148,11 @@ poetry run python python/japanmesh/main.py 1
 
 ## テスト
 
-### Python版
-
 ./pythonディレクトリで以下のコマンドでテスト実行
 
 ```shell
 poetry run python -m unittest discover tests
 ```
-
-## Rust版（試験版）
-
-今後、こちらは更新しない予定です（良くて別リポジトリ管理へ以降）
-
-### バイナリ
-
-- macOS向けは./rust/japanmesh
-- Windows向けは./rust/japanmesh.exe
-  - いずれも64bit向け
-
-Windows環境の場合、japanmeshをjapanmesh.exeに読み替えてください。
-
-```
-rust/japanmesh <meshnum:メッシュ次数> <カンマ区切り左下経緯度> <カンマ区切り右上経緯度>
-```
-
-- Rust版は、常にスクリプト実行時のカレントディレクトリにgeojsonlファイルを保存します
 
 ### コマンド例
 
