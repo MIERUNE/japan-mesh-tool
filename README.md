@@ -63,7 +63,7 @@ poetry run python src/japanmesh/main.py <meshnum:メッシュ次数> <-e:領域�
 #### コマンド例
 
 ```
-poetry run python ./src/japanmesh/main.py 5 -e 142.2,44.0 142.3,44.5 -d ./
+poetry run python src/japanmesh/main.py 5 -e 142.2,44.0 142.3,44.5 -d ./
 ```
 
 4次メッシュ以上は別称で指定する事が出来ます
@@ -148,7 +148,7 @@ poetry run python src/japanmesh/main.py 1
 
 ## テスト
 
-./srcディレクトリで以下のコマンドでテスト実行
+プロジェクトルートディレクトリで以下のコマンドでテスト実行
 
 ```shell
 poetry run python -m unittest discover tests
