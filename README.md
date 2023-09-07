@@ -61,7 +61,7 @@ poetry install
 ### Python版
 
 ```
-poetry run python python/japanmesh/main.py <meshnum:メッシュ次数> <-e:領域指定、"カンマ区切り左下経緯度 カンマ区切り右上経緯度"形式で指定> <-d:保存先>
+poetry run python japan_mesh_tool/main.py <meshnum:メッシュ次数> <-e:領域指定、"カンマ区切り左下経緯度 カンマ区切り右上経緯度"形式で指定> <-d:保存先>
 ```
 
 - 領域指定(-e),保存先(-d)はオプションです
@@ -71,26 +71,26 @@ poetry run python python/japanmesh/main.py <meshnum:メッシュ次数> <-e:領�
 #### コマンド例
 
 ```
-poetry run python python/japanmesh/main.py 5 -e 142.2,44.0 142.3,44.5 -d ./
+poetry run python japan_mesh_tool/main.py 5 -e 142.2,44.0 142.3,44.5 -d ./
 ```
 
 4次メッシュ以上は別称で指定する事が出来ます
 
 ```
-poetry run python python/japanmesh/main.py 250m -e 142.2,44.0 142.3,44.5 -d ./
+poetry run python japan_mesh_tool/main.py 250m -e 142.2,44.0 142.3,44.5 -d ./
 ```
 
 全国分の1次メッシュをカレントディレクトリに出力する場合
 
 ```
-poetry run python python/japanmesh/main.py 1
+poetry run python japan_mesh_tool/main.py 1
 ```
 
 ## Pythonモジュールとして
 
 - ./python/japanmesh自体をPythonモジュールとしてimport可能です
 - その場合、get_meshes()関数のみを使用可能です
-  - (./python/sample.pyを参照)
+  - (./sample.pyを参照)
 
 ## 対応メッシュ次数
 
