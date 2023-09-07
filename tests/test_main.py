@@ -3,26 +3,21 @@ from japanmesh.main import *
 
 
 class TestMain(TestCase):
-
     def test_get_start_offset(self):
         # start_offset=(左から数えて完全に領域外となるx方向メッシュの数,
         # 下から数えて完全に領域外となるy方向メッシュの数,)
         self.assertEqual(get_start_offset(1, [122.0, 20.0]), (0, 0))
         self.assertEqual(get_start_offset(1, [123.0, 20.0]), (1, 0))
-        self.assertEqual(get_start_offset(
-            1, [123.0, 20.66666666666666]), (1, 0))
-        self.assertEqual(get_start_offset(
-            1, [123.0, 20.66666666666667]), (1, 1))
+        self.assertEqual(get_start_offset(1, [123.0, 20.66666666666666]), (1, 0))
+        self.assertEqual(get_start_offset(1, [123.0, 20.66666666666667]), (1, 1))
 
     def test_get_end_offset(self):
         # end_offset=(右から数えて完全に領域外となるx方向メッシュの数,
         # 上から数えて完全に領域外となるy方向メッシュの数,)
         self.assertEqual(get_end_offset(1, [154.0, 46.0]), (0, 0))
         self.assertEqual(get_end_offset(1, [153.0, 46.0]), (1, 0))
-        self.assertEqual(get_end_offset(
-            1, [153.0, 45.33333333333334]), (1, 0))
-        self.assertEqual(get_end_offset(
-            1, [153.0, 45.33333333333333]), (1, 1))
+        self.assertEqual(get_end_offset(1, [153.0, 45.33333333333334]), (1, 0))
+        self.assertEqual(get_end_offset(1, [153.0, 45.33333333333333]), (1, 1))
 
     def test_get_mesh(self):
         mesh = get_mesh(1, 0, 0)
