@@ -93,6 +93,16 @@ class TestMain(TestCase):
         self.assertEqual(get_mesh(4, 1, 1)["code"], "302200004")
         self.assertEqual(get_mesh(4, 2, 2)["code"], "302200111")
         self.assertEqual(get_mesh(4, 1976, 3483)["code"], "513462183")
+        self.assertEqual(get_mesh(4, 351, 1051)["code"], "362441554")  # 石垣
+        self.assertEqual(get_mesh(4, 1214, 2025)["code"], "422954273")  # 奄美
+        self.assertEqual(get_mesh(4, 1389, 3068)["code"], "493015442")  # 熊本
+        self.assertEqual(get_mesh(4, 2850, 3750)["code"], "533936551")  # 東京
+        self.assertEqual(get_mesh(4, 3222, 1624)["code"], "404211211")  # 父島
+        self.assertEqual(get_mesh(4, 2893, 3944)["code"], "544050262")  # 益子
+        self.assertEqual(get_mesh(4, 3016, 4325)["code"], "574006283")  # 仙台
+        self.assertEqual(get_mesh(4, 3115, 4935)["code"], "604163774")  # 八戸
+        self.assertEqual(get_mesh(4, 3270, 5808)["code"], "664223451")  # 士別
+        self.assertEqual(get_mesh(4, 3729, 5552)["code"], "644552642")  # 根室
 
         # 7~:その他メッシュ
         self.assertEqual(get_mesh(7, 0, 0)["code"], "3022000000")
