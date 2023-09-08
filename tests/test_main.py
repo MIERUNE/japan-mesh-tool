@@ -27,42 +27,108 @@ class TestMain(TestCase):
         # メッシュコードの割り振り規則は後述
         self.assertEqual(mesh["code"], "3022")
 
-        # 1次メッシュのメッシュコード
+        # mesh 1st: 1次メッシュのメッシュコード
         self.assertEqual(get_mesh(1, 0, 0)["code"], "3022")
         self.assertEqual(get_mesh(1, 1, 0)["code"], "3023")
         self.assertEqual(get_mesh(1, 0, 1)["code"], "3122")
         self.assertEqual(get_mesh(1, 1, 1)["code"], "3123")
-        self.assertEqual(get_mesh(1, 12, 21)["code"], "5134")
+        self.assertEqual(get_mesh(1, 12, 21)["code"], "5134")  # 高松
+        self.assertEqual(get_mesh(1, 2, 6)["code"], "3624")  # 石垣
+        self.assertEqual(get_mesh(1, 7, 12)["code"], "4229")  # 奄美
+        self.assertEqual(get_mesh(1, 8, 19)["code"], "4930")  # 熊本
+        self.assertEqual(get_mesh(1, 17, 23)["code"], "5339")  # 東京
+        self.assertEqual(get_mesh(1, 20, 10)["code"], "4042")  # 父島
+        self.assertEqual(get_mesh(1, 18, 24)["code"], "5440")  # 益子
+        self.assertEqual(get_mesh(1, 18, 27)["code"], "5740")  # 仙台
+        self.assertEqual(get_mesh(1, 19, 30)["code"], "6041")  # 八戸
+        self.assertEqual(get_mesh(1, 20, 36)["code"], "6642")  # 士別
+        self.assertEqual(get_mesh(1, 23, 34)["code"], "6445")  # 根室
 
-        # 2次メッシュ
+        # mesh 2nd: 2次メッシュ
         self.assertEqual(get_mesh(2, 0, 0)["code"], "302200")
         self.assertEqual(get_mesh(2, 1, 0)["code"], "302201")
         self.assertEqual(get_mesh(2, 0, 1)["code"], "302210")
         self.assertEqual(get_mesh(2, 1, 1)["code"], "302211")
         self.assertEqual(get_mesh(2, 7, 7)["code"], "302277")
         self.assertEqual(get_mesh(2, 8, 8)["code"], "312300")
-        self.assertEqual(get_mesh(2, 98, 174)["code"], "513462")
-        self.assertEqual(get_mesh(2, 116, 176)["code"], "523604")
-        self.assertEqual(get_mesh(2, 117, 176)["code"], "523605")
-        self.assertEqual(get_mesh(2, 116, 184)["code"], "533604")
-        self.assertEqual(get_mesh(2, 116, 185)["code"], "533614")
+        self.assertEqual(get_mesh(2, 98, 174)["code"], "513462")  # 小豆島
+        self.assertEqual(get_mesh(2, 116, 176)["code"], "523604")  # 津
+        self.assertEqual(get_mesh(2, 117, 176)["code"], "523605")  # 津
+        self.assertEqual(get_mesh(2, 116, 184)["code"], "533604")  # 岐阜
+        self.assertEqual(get_mesh(2, 116, 185)["code"], "533614")  # 岐阜
+        self.assertEqual(get_mesh(2, 17, 52)["code"], "362441")  # 石垣
+        self.assertEqual(get_mesh(2, 60, 101)["code"], "422954")  # 奄美
+        self.assertEqual(get_mesh(2, 69, 153)["code"], "493015")  # 熊本
+        self.assertEqual(get_mesh(2, 142, 187)["code"], "533936")  # 東京
+        self.assertEqual(get_mesh(2, 161, 81)["code"], "404211")  # 父島
+        self.assertEqual(get_mesh(2, 144, 197)["code"], "544050")  # 益子
+        self.assertEqual(get_mesh(2, 150, 216)["code"], "574006")  # 仙台
+        self.assertEqual(get_mesh(2, 155, 246)["code"], "604163")  # 八戸
+        self.assertEqual(get_mesh(2, 163, 290)["code"], "664223")  # 士別
+        self.assertEqual(get_mesh(2, 186, 277)["code"], "644552")  # 根室
 
-        # 3次メッシュ
+        # mesh 3rd : 3次メッシュ
         self.assertEqual(get_mesh(3, 0, 0)["code"], "30220000")
         self.assertEqual(get_mesh(3, 1, 1)["code"], "30220011")
         self.assertEqual(get_mesh(3, 9, 9)["code"], "30220099")
         self.assertEqual(get_mesh(3, 10, 10)["code"], "30221100")
         self.assertEqual(get_mesh(3, 79, 79)["code"], "30227799")
         self.assertEqual(get_mesh(3, 80, 80)["code"], "31230000")
-        self.assertEqual(get_mesh(3, 988, 1741)["code"], "51346218")
+        self.assertEqual(get_mesh(3, 988, 1741)["code"], "51346218")  # 小豆島
+        self.assertEqual(get_mesh(3, 175, 525)["code"], "36244155")  # 石垣
+        self.assertEqual(get_mesh(3, 607, 1012)["code"], "42295427")  # 奄美
+        self.assertEqual(get_mesh(3, 694, 1534)["code"], "49301544")  # 熊本
+        self.assertEqual(get_mesh(3, 1425, 1875)["code"], "53393655")  # 東京
+        self.assertEqual(get_mesh(3, 1611, 812)["code"], "40421121")  # 父島
+        self.assertEqual(get_mesh(3, 1446, 1972)["code"], "54405026")  # 益子
+        self.assertEqual(get_mesh(3, 1508, 2162)["code"], "57400628")  # 仙台
+        self.assertEqual(get_mesh(3, 1557, 2467)["code"], "60416377")  # 八戸
+        self.assertEqual(get_mesh(3, 1635, 2904)["code"], "66422345")  # 士別
+        self.assertEqual(get_mesh(3, 1864, 2776)["code"], "64455264")  # 根室
 
-        # 4~6:分割地域メッシュ
+        # mesh 4th: 2分の1地域メッシュ
         self.assertEqual(get_mesh(4, 0, 0)["code"], "302200001")
         self.assertEqual(get_mesh(4, 1, 0)["code"], "302200002")
         self.assertEqual(get_mesh(4, 0, 1)["code"], "302200003")
         self.assertEqual(get_mesh(4, 1, 1)["code"], "302200004")
         self.assertEqual(get_mesh(4, 2, 2)["code"], "302200111")
-        self.assertEqual(get_mesh(4, 1976, 3483)["code"], "513462183")
+        self.assertEqual(get_mesh(4, 1976, 3483)["code"], "513462183")  # 小豆島
+        self.assertEqual(get_mesh(4, 351, 1051)["code"], "362441554")  # 石垣
+        self.assertEqual(get_mesh(4, 1214, 2025)["code"], "422954273")  # 奄美
+        self.assertEqual(get_mesh(4, 1389, 3068)["code"], "493015442")  # 熊本
+        self.assertEqual(get_mesh(4, 2850, 3750)["code"], "533936551")  # 東京
+        self.assertEqual(get_mesh(4, 3222, 1624)["code"], "404211211")  # 父島
+        self.assertEqual(get_mesh(4, 2893, 3944)["code"], "544050262")  # 益子
+        self.assertEqual(get_mesh(4, 3016, 4325)["code"], "574006283")  # 仙台
+        self.assertEqual(get_mesh(4, 3115, 4935)["code"], "604163774")  # 八戸
+        self.assertEqual(get_mesh(4, 3270, 5808)["code"], "664223451")  # 士別
+        self.assertEqual(get_mesh(4, 3729, 5552)["code"], "644552642")  # 根室
+
+        # mesh 5th : 4分の1地域メッシュ
+        self.assertEqual(get_mesh(5, 703, 2103)["code"], "3624415544")  # 石垣
+        self.assertEqual(get_mesh(5, 2428, 4051)["code"], "4229542733")  # 奄美
+        self.assertEqual(get_mesh(5, 2779, 6136)["code"], "4930154422")  # 熊本
+        self.assertEqual(get_mesh(5, 5700, 7500)["code"], "5339365511")  # 東京
+        self.assertEqual(get_mesh(5, 6445, 3248)["code"], "4042112112")  # 父島
+        self.assertEqual(get_mesh(5, 5786, 7889)["code"], "5440502623")  # 益子
+        self.assertEqual(get_mesh(5, 6033, 8651)["code"], "5740062834")  # 仙台
+        self.assertEqual(get_mesh(5, 6230, 9871)["code"], "6041637743")  # 八戸
+        self.assertEqual(get_mesh(5, 6541, 11616)["code"], "6642234512")  # 士別
+        self.assertEqual(get_mesh(5, 7458, 11105)["code"], "6445526423")  # 根室
+        self.assertEqual(get_mesh(5, 3952, 6966)["code"], "5134621831")  # 小豆島
+
+        # mesh 6th : 8分の1地域メッシュ
+        self.assertEqual(get_mesh(6, 1407, 4206)["code"], "36244155442")  # 石垣
+        self.assertEqual(get_mesh(6, 4857, 8103)["code"], "42295427334")  # 奄美
+        self.assertEqual(get_mesh(6, 5558, 12273)["code"], "49301544223")  # 熊本
+        self.assertEqual(get_mesh(6, 11400, 15001)["code"], "53393655113")  # 東京
+        self.assertEqual(get_mesh(6, 12890, 6496)["code"], "40421121121")  # 父島
+        self.assertEqual(get_mesh(6, 11573, 15778)["code"], "54405026232")  # 益子
+        self.assertEqual(get_mesh(6, 12066, 17302)["code"], "57400628341")  # 仙台
+        self.assertEqual(get_mesh(6, 12461, 19742)["code"], "60416377432")  # 八戸
+        self.assertEqual(get_mesh(6, 13083, 23233)["code"], "66422345124")  # 士別
+        self.assertEqual(get_mesh(6, 14917, 22210)["code"], "64455264232")  # 根室
+        self.assertEqual(get_mesh(6, 7904, 13932)["code"], "51346218311")  # 小豆島
 
         # 7~:その他メッシュ
         self.assertEqual(get_mesh(7, 0, 0)["code"], "3022000000")
