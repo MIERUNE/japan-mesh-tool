@@ -164,7 +164,10 @@ def get_mesh_vertex(x: int, x_size: float, y: int, y_size: float) -> (float, flo
 
 @lru_cache(maxsize=None)
 def get_base_cellcount(meshnum: int) -> (int, int, int):
-    unitcount = math.prod([info["ratio"] for idx, info in enumerate(MESH_INFOS) if 0 < idx <= meshnum])
+    idxs = [meshnum]
+    while idxs[-1]!=1:
+        idxs.append(MESH_INFOS[idxs[-1]]["parent"])
+    unitcount = math.prod([MESH_INFOS[i]["ratio"] for i in idxs])
 
     if not MINIMUM_LON.is_integer():
         raise Exception(f'Unexpected MINIMUM_LON: {MINIMUM_LON}')
